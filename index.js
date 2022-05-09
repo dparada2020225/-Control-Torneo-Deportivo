@@ -9,7 +9,6 @@ mongoose.connect('mongodb://localhost:27017/TorneoLigas', { useNewUrlParser: tru
     app.listen(3000, function () {
         console.log("Esta corriendo en el puerto 3000!")
         usuarioControlador.UsuarioDefault();
-        
     })
 
 }).catch(error => console.log(error));

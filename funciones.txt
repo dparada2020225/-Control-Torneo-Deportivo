@@ -1,0 +1,38 @@
+login
+registrar
+
+admin-----
+
+/usuarios/
+editar un usuario (no admin)
+eliminar un asuario (no admin)
+crear un administrador (no comun)
+ver Usuario(no admin)
+
+/torneos/
+crear torneo
+editar torneo
+eliminar torneo
+visualizar torneo
+
+user-----
+registrarse
+loguearse
+editar perfil logueado
+
+/ligas/ 
+crear liga(solo las que user creo)
+ver liga(solo las que user creo)
+editar liga(solo las que user creo)
+eliminar liga(solo las que user creo)
+
+----
+ver ligas 
+ver equipos de una liga elegida
+----
+
+/verificaciones/
+ver pdf
+
+
+ 
