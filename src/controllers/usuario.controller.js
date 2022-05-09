@@ -30,7 +30,7 @@ function UsuarioDefault(req, res) {
 function Login(req, res) {
     var parametros = req.body;
 
-    Usuario.findOne({ nombre: parametros.nombre }, (err, usuarioencontrado) => {
+    Usuario.findOne({ email: parametros.email }, (err, usuarioencontrado) => {
         if (err) return res.status(500).send({ mensaje: 'error en la peticion ' });
         if (usuarioencontrado) {
             bcrypt.compare(parametros.password, usuarioencontrado.password, (err, Verificaciondepasswor) => {
@@ -51,9 +51,53 @@ function Login(req, res) {
     })
 }
 
+function nuevoAdmin(req, res) {
+    var modeloUsuario = new Usuario();
+    var parametros = req.body;
+    var token = req.user
+
+    if (token.rol = "ADMIN") {
+        modeloUsuario.nombre = parametros.nombre
+        modeloUsuario.email = parametros.nombre + "@gmail.com"
+        modeloUsuario.password = parametros.password    
+        modeloUsuario.rol = "ADMIN"
+
+        bcrypt.hash(parametros.password, null, null, (err, passwordEncryptada) => {
+            modeloUsuario.password = passwordEncryptada
+            modeloUsuario.save((err, usuarioGuardado) => {
+                if (err) res.status(500).send({ mensaje: 'error en la peticion ' })
+                if (!usuarioGuardado) res.status(404).send({ mensaje: 'error al crear usuario por defecto ' })
+                return res.status(200).send({ Usuario: usuarioGuardado })
+            })
+        })
+    }else {
+        return res.status(500).send({ mensaje: "no puede crear un administrador"})
+    }
+}
+
+function registrar(req, res) {
+    var modeloUsuario = new Usuario();
+    var parametros = req.body;
+
+        modeloUsuario.nombre = parametros.nombre
+        modeloUsuario.email = parametros.nombre + "@gmail.com"
+        modeloUsuario.password = parametros.password    
+        modeloUsuario.rol = "user" 
+
+        bcrypt.hash(parametros.password, null, null, (err, passwordEncryptada) => {
+            modeloUsuario.password = passwordEncryptada
+            modeloUsuario.save((err, usuarioGuardado) => {
+                if (err) res.status(500).send({ mensaje: 'error en la peticion ' })
+                if (!usuarioGuardado) res.status(404).send({ mensaje: 'error al crear usuario por defecto ' })
+                return res.status(200).send({ Usuario: usuarioGuardado })
+            })
+        })  
+}
 
 module.exports = {
     UsuarioDefault,
     Login,
+    nuevoAdmin,
+    registrar,
     
 }
