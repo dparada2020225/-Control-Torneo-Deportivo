@@ -94,10 +94,40 @@ function registrar(req, res) {
         })  
 }
 
+function EditarUsuario(req, res) {
+    var parametros = req.body;
+    var idUser = req.params.idUser
+    var token = req.user
+
+    if (token.rol == "ADMIN") {
+
+        Usuario.findById({ _id:idUser}, (err, usuarioEncontrado) => {
+            if (err) return res.status(500).send({ mensaje: "error en la peticion 1"})
+            if(!usuarioEncontrado) return res.status(500).send({ mensaje: "error al encontrar al usuario"})
+
+            if (usuarioEncontrado.rol == "ADMIN") {
+                return res.status(500).send({ mensaje: "no puede editar a un administrador"})
+            }else{
+                Usuario.findByIdAndUpdate(idUser, parametros , {new:true}, (err, usuarioEditado)=>{
+                    if (err) return res.status(500).send({ mensaje: "error en la peticion"})
+                    if(!usuarioEditado) return res.status(500).send({ mensaje: "error al editar al usuario"})
+
+                    return res.status(500).send({ usuarioEditado: usuarioEditado})
+                } )
+            }
+        })
+
+       
+    }else {
+        return res.status(500).send({ mensaje: "no puede editar a un usuario"})
+    }
+}
+
 module.exports = {
     UsuarioDefault,
     Login,
     nuevoAdmin,
     registrar,
+    EditarUsuario
     
 }
