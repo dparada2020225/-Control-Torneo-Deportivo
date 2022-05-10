@@ -10,4 +10,6 @@ api.post('/nuevoAdmin', md_autenticacion.Auth ,usuarioControlador.nuevoAdmin);//
 api.put('/editarUsuario/:idUser',  md_autenticacion.Auth ,usuarioControlador.EditarUsuario)// editar un usuario  
 api.delete('/eliminarUsuario/:idUser',  md_autenticacion.Auth ,usuarioControlador.EliminarUsuario)// eliminar un usuario 
 api.post('/registrar', usuarioControlador.registrar);// registrar usuarios de tipo user
+
+api.put('/editarPerfil',  md_autenticacion.Auth ,usuarioControlador.EditarPerfil)// editar perfil del usuario logueado
 module.exports = api;

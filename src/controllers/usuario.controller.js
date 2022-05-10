@@ -59,7 +59,7 @@ function nuevoAdmin(req, res) {
     if (token.rol = "ADMIN") {
         modeloUsuario.nombre = parametros.nombre
         modeloUsuario.email = parametros.nombre + "@gmail.com"
-        modeloUsuario.password = parametros.password    
+        modeloUsuario.password = parametros.password
         modeloUsuario.rol = "ADMIN"
 
         bcrypt.hash(parametros.password, null, null, (err, passwordEncryptada) => {
@@ -70,8 +70,8 @@ function nuevoAdmin(req, res) {
                 return res.status(200).send({ Usuario: usuarioGuardado })
             })
         })
-    }else {
-        return res.status(500).send({ mensaje: "no puede crear un administrador"})
+    } else {
+        return res.status(500).send({ mensaje: "no puede crear un administrador" })
     }
 }
 
@@ -79,46 +79,46 @@ function registrar(req, res) {
     var modeloUsuario = new Usuario();
     var parametros = req.body;
 
-        modeloUsuario.nombre = parametros.nombre
-        modeloUsuario.email = parametros.nombre + "@gmail.com"
-        modeloUsuario.password = parametros.password    
-        modeloUsuario.rol = "user" 
+    modeloUsuario.nombre = parametros.nombre
+    modeloUsuario.email = parametros.nombre + "@gmail.com"
+    modeloUsuario.password = parametros.password
+    modeloUsuario.rol = "user"
 
-        bcrypt.hash(parametros.password, null, null, (err, passwordEncryptada) => {
-            modeloUsuario.password = passwordEncryptada
-            modeloUsuario.save((err, usuarioGuardado) => {
-                if (err) res.status(500).send({ mensaje: 'error en la peticion ' })
-                if (!usuarioGuardado) res.status(404).send({ mensaje: 'error al crear usuario por defecto ' })
-                return res.status(200).send({ Usuario: usuarioGuardado })
-            })
-        })  
+    bcrypt.hash(parametros.password, null, null, (err, passwordEncryptada) => {
+        modeloUsuario.password = passwordEncryptada
+        modeloUsuario.save((err, usuarioGuardado) => {
+            if (err) res.status(500).send({ mensaje: 'error en la peticion ' })
+            if (!usuarioGuardado) res.status(404).send({ mensaje: 'error al crear usuario por defecto ' })
+            return res.status(200).send({ Usuario: usuarioGuardado })
+        })
+    })
 }
 
-function EditarUsuario(req, res) { 
+function EditarUsuario(req, res) {
     var parametros = req.body;
     var idUser = req.params.idUser
     var token = req.user
 
     if (token.rol == "ADMIN") {
 
-        Usuario.findById({ _id:idUser}, (err, usuarioEncontrado) => {
-            if (err) return res.status(500).send({ mensaje: "error en la peticion 1"})
-            if(!usuarioEncontrado) return res.status(500).send({ mensaje: "error al encontrar al usuario"})
+        Usuario.findById({ _id: idUser }, (err, usuarioEncontrado) => {
+            if (err) return res.status(500).send({ mensaje: "error en la peticion 1" })
+            if (!usuarioEncontrado) return res.status(500).send({ mensaje: "error al encontrar al usuario" })
 
             if (usuarioEncontrado.rol == "ADMIN") {
-                return res.status(500).send({ mensaje: "no puede editar a un administrador"})
-            }else{
-                Usuario.findByIdAndUpdate(idUser, parametros , {new:true}, (err, usuarioEditado)=>{
-                    if (err) return res.status(500).send({ mensaje: "error en la peticion"})
-                    if(!usuarioEditado) return res.status(500).send({ mensaje: "error al editar al usuario"})
+                return res.status(500).send({ mensaje: "no puede editar a un administrador" })
+            } else {
+                Usuario.findByIdAndUpdate(idUser, parametros, { new: true }, (err, usuarioEditado) => {
+                    if (err) return res.status(500).send({ mensaje: "error en la peticion" })
+                    if (!usuarioEditado) return res.status(500).send({ mensaje: "error al editar al usuario" })
 
-                    return res.status(500).send({ usuarioEditado: usuarioEditado})
-                } )
+                    return res.status(500).send({ usuarioEditado: usuarioEditado })
+                })
             }
         })
-       
-    }else {
-        return res.status(500).send({ mensaje: "no puede editar a un usuario"})
+
+    } else {
+        return res.status(500).send({ mensaje: "no puede editar a un usuario" })
     }
 }
 
@@ -128,31 +128,45 @@ function EliminarUsuario(req, res) {
 
     if (token.rol == "ADMIN") {
 
-        Usuario.findById({ _id:idUser}, (err, usuarioEncontrado) => {
-            if (err) return res.status(500).send({ mensaje: "error en la peticion 1"})
-            if(!usuarioEncontrado) return res.status(500).send({ mensaje: "error al encontrar al usuario"})
+        Usuario.findById({ _id: idUser }, (err, usuarioEncontrado) => {
+            if (err) return res.status(500).send({ mensaje: "error en la peticion 1" })
+            if (!usuarioEncontrado) return res.status(500).send({ mensaje: "error al encontrar al usuario" })
             if (usuarioEncontrado.rol == "ADMIN") {
-                return res.status(500).send({ mensaje: "no puede eliminar a un administrador"})
-            }else{
-                Usuario.findByIdAndDelete(idUser,(err, usuarioEliminado)=>{
-                    if (err) return res.status(500).send({ mensaje: "error en la peticion"})
-                    if(!usuarioEliminado) return res.status(500).send({ mensaje: "error al editar al usuario"})
+                return res.status(500).send({ mensaje: "no puede eliminar a un administrador" })
+            } else {
+                Usuario.findByIdAndDelete(idUser, (err, usuarioEliminado) => {
+                    if (err) return res.status(500).send({ mensaje: "error en la peticion" })
+                    if (!usuarioEliminado) return res.status(500).send({ mensaje: "error al editar al usuario" })
 
-                    return res.status(500).send({ UsuarioEliminado: usuarioEliminado})
-                } )
+                    return res.status(500).send({ UsuarioEliminado: usuarioEliminado })
+                })
             }
         })
-       
-    }else {
-        return res.status(500).send({ mensaje: "no puede editar a un usuario"})
+
+    } else {
+        return res.status(500).send({ mensaje: "no puede editar a un usuario" })
     }
 }
 
+function EditarPerfil(req, res) {
+    var parametros = req.body;
+    var token = req.user
+    
+    Usuario.findByIdAndUpdate(token._id, parametros, { new: true }, (err, usuarioEditado) => {
+        if (err) return res.status(500).send({ mensaje: "error en la peticion" })
+        if (!usuarioEditado) return res.status(500).send({ mensaje: "error al editar al usuario" })
+
+        return res.status(500).send({ usuarioEditado: usuarioEditado })
+    })
+
+
+}
 module.exports = {
     UsuarioDefault,
     Login,
     nuevoAdmin,
     registrar,
     EditarUsuario,
-    EliminarUsuario    
+    EliminarUsuario,
+    EditarPerfil
 }
