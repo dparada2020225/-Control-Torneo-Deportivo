@@ -1,5 +1,5 @@
 const express = require('express');
-const torneoControlador = require('../controllers/torneo.Controller');
+const torneoControlador = require('../controllers/torneo.controller');
 const md_autenticacion = require('../middlewares/autenticacion');
 
 const api = express.Router();
