@@ -131,11 +131,10 @@ function EliminarUsuario(req, res) {
         Usuario.findById({ _id:idUser}, (err, usuarioEncontrado) => {
             if (err) return res.status(500).send({ mensaje: "error en la peticion 1"})
             if(!usuarioEncontrado) return res.status(500).send({ mensaje: "error al encontrar al usuario"})
-
             if (usuarioEncontrado.rol == "ADMIN") {
                 return res.status(500).send({ mensaje: "no puede eliminar a un administrador"})
             }else{
-                Usuario.findByIdAndUpdate(idUser,(err, usuarioEliminado)=>{
+                Usuario.findByIdAndDelete(idUser,(err, usuarioEliminado)=>{
                     if (err) return res.status(500).send({ mensaje: "error en la peticion"})
                     if(!usuarioEliminado) return res.status(500).send({ mensaje: "error al editar al usuario"})
 
@@ -148,8 +147,6 @@ function EliminarUsuario(req, res) {
         return res.status(500).send({ mensaje: "no puede editar a un usuario"})
     }
 }
-
-
 
 module.exports = {
     UsuarioDefault,
