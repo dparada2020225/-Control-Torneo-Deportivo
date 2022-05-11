@@ -151,15 +151,12 @@ function EliminarUsuario(req, res) {
 function EditarPerfil(req, res) {
     var parametros = req.body;
     var token = req.user
-    
+
     Usuario.findByIdAndUpdate(token._id, parametros, { new: true }, (err, usuarioEditado) => {
         if (err) return res.status(500).send({ mensaje: "error en la peticion" })
         if (!usuarioEditado) return res.status(500).send({ mensaje: "error al editar al usuario" })
-
         return res.status(500).send({ usuarioEditado: usuarioEditado })
     })
-
-
 }
 module.exports = {
     UsuarioDefault,
